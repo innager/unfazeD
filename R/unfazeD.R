@@ -99,8 +99,8 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
 #' Ux and Uy; however, if present in either one, the likelihood is 0, so no need
 #' to calculate.
 #'
-#' @param plik proportion of the range of loglikelihood to use as an acceptance
-#'   region.
+#' @param proplik proportion of the range of loglikelihood to use for an
+#'   acceptance region.
 #' @inherit gdistPair return params
 #' @export
 

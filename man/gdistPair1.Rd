@@ -5,7 +5,7 @@
 \title{Genetic distance for data with genotyping errors}
 \usage{
 gdistPair1(pair, afreq, coi, nr = 100, nm = min(coi), rval = NULL,
-  reval = NULL, equalr = FALSE, out = "mle")
+  reval = NULL, equalr = FALSE, out = "mle", proplik = 0.1)
 }
 \arguments{
 \item{pair}{a list of length two containing two samples.}
@@ -35,6 +35,9 @@ different pairs of strains are evaluated.}
 \item{out}{a character string for the type of results to be returned. If
 \code{"mle"}, an estimate is returned, if \code{"llik"} - a vector of
 log-likelihood for each combination.}
+
+\item{proplik}{proportion of the range of loglikelihood to use for an
+acceptance region.}
 }
 \value{
 If \code{out} is \code{"mle"}, a vector of length 1 if \code{equalr}
