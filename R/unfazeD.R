@@ -99,11 +99,15 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
 #' Ux and Uy; however, if present in either one, the likelihood is 0, so no need
 #' to calculate.
 #'
+#' @param plik proportion of the range of loglikelihood to use as an acceptance
+#'   region.
 #' @inherit gdistPair return params
 #' @export
 
+# out options: "mle", "llik", "all" (*** gdistPair1 only - add to others?)
 gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
-                       reval = NULL, equalr = FALSE, out = "mle") {  # "mle", "llik"
+                       reval = NULL, equalr = FALSE, out = "mle",
+                       proplik = 0.1) {
   nloc <- length(afreq)
 
   if (is.null(rval)) {
@@ -139,7 +143,7 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
       llikt <- probUxUy(   Ux, Uy, coix, coiy, afreq[[t]], reval[[nm]])
     }
     if (llikt[1] == -Inf) {
-      if (all(llikt == -Inf)) {  #*********** error here
+      if (all(llikt == -Inf)) {
         next
       } else {
         iinf <- which(llikt == -Inf)
@@ -153,15 +157,27 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
 
   if (out == "llik") {
     return(llik)
-  } else {
-    imax <- which(llik == max(llik))
-    if (equalr) {
-      return(mean(reval[[nm]][imax]))  # [1] first only; reval[imax] - all; mean()
-    } else {
-      return(rowMeans(reval[[nm]][, imax, drop = FALSE]))
-      # reval[[nm]][, imax[1]]; reval[[nm]][, imax];
-    }
   }
+  imax <- which(llik == max(llik))
+  if (equalr) {
+    est <- mean(reval[[nm]][imax])  # [1] first only; reval[imax] - all; mean()
+  } else {
+    est <- rowMeans(reval[[nm]][, imax, drop = FALSE])
+    # reval[[nm]][, imax[1]]; reval[[nm]][, imax];
+  }
+  if (out == "mle") {
+    return(est)
+  }
+  llrange <- range(llik)
+  cutoff  <- llrange[2] - diff(llrange)*proplik
+  itop    <- llik >= cutoff
+  proptop <- sum(itop)/neval
+  if (equalr) {
+    rtop <- reval[[nm]][itop]
+  } else {
+    rtop <- reval[[nm]][, itop, drop = FALSE]
+  }
+  return(list(mle = est, llik = llik, rtop = rtop, proptop = proptop))
 }
 
 #' Genetic distance for data with genotyping errors
