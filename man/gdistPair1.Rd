@@ -43,8 +43,10 @@ acceptance region.}
 If \code{out} is \code{"mle"}, a vector of length 1 if \code{equalr}
 is \code{TRUE} or length \code{nm} otherwise, containing estimated
 \eqn{{r}} (or vector/matrix if not just first). If \code{out} is
-\code{"llike"}, a vector of log-likelihood values for each evaluated
-combination.
+\code{"llike"}, a vector of loglikelihood values for each evaluated
+combination, and if \code{out} is \code{"all"}, a list, which contains
+both loglikelihood and MLE, as well as \eqn{{r}} values corresponding to
+the acceptance region and their proportion (out of all evaluated).
 }
 \description{
 Distance when estimated COI is less than |Ux|: COI increased to |Ux| for a

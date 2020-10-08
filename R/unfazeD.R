@@ -101,7 +101,14 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
 #'
 #' @param proplik proportion of the range of loglikelihood to use for an
 #'   acceptance region.
-#' @inherit gdistPair return params
+#' @return If \code{out} is \code{"mle"}, a vector of length 1 if \code{equalr}
+#'   is \code{TRUE} or length \code{nm} otherwise, containing estimated
+#'   \eqn{{r}} (or vector/matrix if not just first). If \code{out} is
+#'   \code{"llike"}, a vector of loglikelihood values for each evaluated
+#'   combination, and if \code{out} is \code{"all"}, a list, which contains
+#'   both loglikelihood and MLE, as well as \eqn{{r}} values corresponding to
+#'   the acceptance region and their proportion (out of all evaluated).
+#' @inherit gdistPair params
 #' @export
 
 # out options: "mle", "llik", "all" (*** gdistPair1 only - add to others?)
