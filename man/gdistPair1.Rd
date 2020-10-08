@@ -40,14 +40,16 @@ log-likelihood for each combination.}
 acceptance region.}
 }
 \value{
-*If \code{out = "mle"}: a vector of length 1 if \code{equalr = TRUE}
+\itemize{
+\item If \code{out = "mle"}: a vector of length 1 if \code{equalr = TRUE}
 or of length \code{nm} otherwise, containing estimated \eqn{{r}} (or vector
 /matrix if not just first).
-*If \code{out = "llike"}, a vector of loglikelihood values for each
+\item If \code{out = "llike"}, a vector of loglikelihood values for each
 evaluated combination.
-*If \code{out = "all"}, a list, which contains both loglikelihood and MLE,
+\item If \code{out = "all"}, a list, which contains both loglikelihood and MLE,
 as well as \eqn{{r}} values corresponding to the acceptance region and
 their proportion (out of all evaluated).
+}
 }
 \description{
 Distance when estimated COI is less than |Ux|: COI increased to |Ux| for a
