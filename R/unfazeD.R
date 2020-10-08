@@ -177,7 +177,7 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   if (out == "mle") {
     return(est)
   }
-  llrange <- range(llik)
+  llrange <- range(llik[is.finite(llik)])  # some likelihoods can be 0
   cutoff  <- llrange[2] - diff(llrange)*proplik
   itop    <- llik >= cutoff
   proptop <- sum(itop)/neval
