@@ -51,7 +51,8 @@ SEXP llikEqr(SEXP Rux, SEXP Ruy, SEXP Rixy, SEXP Riyx, SEXP Rnx, SEXP Rny,
   bx = nx - ax;  /* can not be 0 */
   by = ny - ay;
 
-  int ux[nux], uy[nuy], ixy[nuxy], iyx[nuxy], vx[nux], vy[nuy];
+  int ux[nux], uy[nuy], ixy[nuxy], iyx[nuxy], vx[nux], vy[nuy],
+    vmaxx[nux], vmaxy[nuy];  
   double logp[K], logpx[nux], logpy[nuy], logpxy[nuxy], ppx[ax], ppy[ay],
     pplastx[bx], pplasty[by], sprob[nm + 1], cbinom[nm + 1];
 
@@ -75,6 +76,12 @@ SEXP llikEqr(SEXP Rux, SEXP Ruy, SEXP Rixy, SEXP Riyx, SEXP Rnx, SEXP Rny,
   for (i = 0; i < nuy;  i++) logpy[ i] = logp[uy[i]];
   for (i = 0; i < nuxy; i++) logpxy[i] = logp[ux[ixy[i]]];
 
+  /* vmaxx, vmaxy */
+  vmaxx[0] = bx;
+  vmaxy[0] = by;
+  for (i = 1; i < nux; i++) vmaxx[i] = 1;
+  for (i = 1; i < nuy; i++) vmaxy[i] = 1;  
+
   /* pplastx, pplasty - partial probs for last category */
   pplastx[0] = logpx[ax];
   for (i = 1; i < bx; i++) {
@@ -97,8 +104,8 @@ SEXP llikEqr(SEXP Rux, SEXP Ruy, SEXP Rixy, SEXP Riyx, SEXP Rnx, SEXP Rny,
   vx[ax] = bx + 1;
 
   /* subsequent combinations */ 
-  ix = ax - 1; 
-  while (vx[0] != bx) {  /* cannot use "<" if ax = 0 */
+  ix = ax - 1;
+  while (!equalArr(vx, vmaxx, nux)) {       
     if (ax == 0) {  
       vx[ax]--;     
     } else if (vx[ax] == 1 || vx[ix] == bx) {
@@ -131,8 +138,8 @@ SEXP llikEqr(SEXP Rux, SEXP Ruy, SEXP Rixy, SEXP Riyx, SEXP Rnx, SEXP Rny,
     vy[ay] = by + 1;
 
     /* subsequent combinations for y */
-    iy = ay - 1;    
-    while (vy[0] != by) {
+    iy = ay - 1;
+    while (!equalArr(vy, vmaxy, nuy)) {         
       if (ay == 0) {
 	vy[ay]--;
       } else if (vy[ay] == 1 || vy[iy] == by) {

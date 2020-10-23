@@ -129,7 +129,7 @@ void probSxSyCond(int *vx, int *vy, double *logpxy, double *logj, double *factj,
     s[i]   = 0;                       /* first subset - empty */
     vxc[i] = vx[ixy[i]];
     vyc[i] = vy[iyx[i]];
-    vxy[i] = MIN(vx[ixy[i]], vy[iyx[i]]);
+    vxy[i] = MIN(vxc[i], vyc[i]);
     *mmax += vxy[i];
   }
   *mmax = MIN(*mmax, nm);  
