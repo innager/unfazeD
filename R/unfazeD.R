@@ -36,7 +36,7 @@
 
 #*** add NA handling
 gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
-                      reval = NULL, equalr = FALSE, out = "mle") {  # "mle", "llik"
+                      reval = NULL, equalr = FALSE, out = "mle") {  # "mle", "llik", "all"
   nloc <- length(afreq)
 
   if (is.null(rval)) {
@@ -46,9 +46,9 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     neval <- length(rval)
   } else {
     if (is.null(reval)) {
-      reval <- generateReval(nm, nm, rval)  # to fill elements 1 and nm only
+      reval <- generateReval(nm, rval)[[nm]]
     }
-    neval <- ncol(reval[[nm]])
+    neval <- ncol(reval)
   }
 
   llik <- rep(0, neval)
@@ -63,7 +63,7 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     if (equalr) {
       llikt <- probUxUyEqr(Ux, Uy, coi[1], coi[2], afreq[[t]], rval, nm)
     } else {
-      llikt <- probUxUy(   Ux, Uy, coi[1], coi[2], afreq[[t]], reval[[nm]])
+      llikt <- probUxUy(   Ux, Uy, coi[1], coi[2], afreq[[t]], reval)
     }
     if (llikt[1] == -Inf) {
       if (all(llikt == -Inf)) {
@@ -83,10 +83,10 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   } else {
     imax <- which(llik == max(llik))
     if (equalr) {
-      return(mean(reval[[nm]][imax]))  # [1] first only; reval[imax] - all; mean()
+      return(mean(reval[imax]))  # [1] first only; reval[imax] - all; mean()
     } else {
-      return(rowMeans(reval[[nm]][, imax, drop = FALSE]))
-      # reval[[nm]][, imax[1]]; reval[[nm]][, imax];
+      return(rowMeans(reval[, imax, drop = FALSE]))
+      # reval[, imax[1]]
     }
   }
 }
@@ -126,9 +126,9 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     neval <- length(rval)
   } else {
     if (is.null(reval)) {
-      reval <- generateReval(nm, nm, rval)  # to fill elements 1 and nm only
+      reval <- generateReval(nm, rval)[[nm]]
     }
-    neval <- ncol(reval[[nm]])
+    neval <- ncol(reval)
   }
 
   llik <- rep(0, neval)
@@ -149,7 +149,7 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     if (equalr) {
       llikt <- probUxUyEqr(Ux, Uy, coix, coiy, afreq[[t]], rval, nm)
     } else {
-      llikt <- probUxUy(   Ux, Uy, coix, coiy, afreq[[t]], reval[[nm]])
+      llikt <- probUxUy(   Ux, Uy, coix, coiy, afreq[[t]], reval)
     }
     if (llikt[1] == -Inf) {
       if (all(llikt == -Inf)) {
@@ -169,10 +169,10 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   }
   imax <- which(llik == max(llik))
   if (equalr) {
-    est <- mean(reval[[nm]][imax])  # [1] first only; reval[imax] - all; mean()
+    est <- mean(reval[imax])  # [1] first only; reval[imax] - all; mean()
   } else {
-    est <- rowMeans(reval[[nm]][, imax, drop = FALSE])
-    # reval[[nm]][, imax[1]]; reval[[nm]][, imax];
+    est <- rowMeans(reval[, imax, drop = FALSE])
+    # reval[, imax[1]]
   }
   if (out == "mle") {
     return(est)
@@ -182,9 +182,9 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   itop    <- llik >= cutoff
   proptop <- sum(itop)/neval
   if (equalr) {
-    rtop <- reval[[nm]][itop]
+    rtop <- reval[itop]
   } else {
-    rtop <- reval[[nm]][, itop, drop = FALSE]
+    rtop <- reval[, itop, drop = FALSE]
   }
   return(list(mle = est, llik = llik, rtop = rtop, proptop = proptop))
 }
@@ -209,9 +209,9 @@ gdistPair2 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     neval <- length(rval)
   } else {
     if (is.null(reval)) {
-      reval <- generateReval(nm, nm, rval)  # to fill elements 1 and nm only
+      reval <- generateReval(nm, rval)[[nm]]
     }
-    neval <- ncol(reval[[nm]])
+    neval <- ncol(reval)
   }
 
   llik <- rep(0, neval)
@@ -236,7 +236,7 @@ gdistPair2 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
                                          coi[1], coi[2], afreq[[t]], rval, nm)
         } else {
           llikt[icomb, ] <- probUxUy(   Uxcomb[, icx], Uycomb[, icy],
-                                        coi[1], coi[2], afreq[[t]], reval[[nm]])
+                                        coi[1], coi[2], afreq[[t]], reval)
         }
         icomb <- icomb + 1
       }
@@ -260,10 +260,10 @@ gdistPair2 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   } else {
     imax <- which(llik == max(llik))
     if (equalr) {
-      return(mean(reval[[nm]][imax]))  # [1] first only; reval[imax] - all; mean()
+      return(mean(reval[imax]))  # [1] first only; reval[imax] - all; mean()
     } else {
-      return(rowMeans(reval[[nm]][, imax, drop = FALSE]))
-      # reval[[nm]][, imax[1]]; reval[[nm]][, imax];
+      return(rowMeans(reval[, imax, drop = FALSE]))
+      # reval[, imax[1]]
     }
   }
 }
@@ -320,9 +320,8 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
     neval <- length(rval)
   } else {
     if (is.null(reval)) {
-      reval <- generateReval(coi, nmmax, rval)
+      reval <- generateReval(1:nmmax, rval)
     }
-    neval <- ncol(reval)
   }
   res  <- matrix(list(NA), nsmp, nsmp)
 
@@ -333,7 +332,7 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
         res[[ix, ix]] <- rep(1, ifelse(equalr, 1, min(coi[ix], nmmax)))
         next
       }
-      llik <- rep(0, neval)
+      llik <- rep(0, ifelse(equalr, neval, ncol(reval[[nm]])))
       for (t in 1:nloc) {
         if (format == "matstr") {
           alleles <- names(afreq[[t]])
@@ -384,13 +383,17 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
   return(res)
 }
 
-# list returned; all coi up to nmmax
-generateReval <- function(coi, nmmax, rval) {
-  allnm <- unique(sort(c(coi, nmmax), decreasing = TRUE)[-1])
-  allnm <- rev(allnm[allnm <= nmmax])
+#' @param Meval integer vector
+#' @return A list of length \code{max(Meval)}. Indices of the elements
+#'   correspond to values \code{i} in \code{Meval}; each such element is a
+#'   matrix with \code{i} rows. Other elements (if any) are \code{NULL} except
+#'   for the first, which is always included.
+#'
+# list returned, elements correspond to Meval; M = 1 included always
+generateReval <- function(Meval, rval) {
   # if FUNnm, calculate all pairwise nm, then take unique()
   reval <- list(matrix(rval, 1))
-  for (M in allnm[allnm > 1]) {
+  for (M in Meval[Meval > 1]) {
     revalm <- as.matrix(expand.grid(rep(list(rval), M)))
     for (k in 1:nrow(revalm)) {         # faster than apply()
       revalm[k, ] <- sort(revalm[k, ])
