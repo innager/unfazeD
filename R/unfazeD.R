@@ -83,7 +83,7 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   } else {
     imax <- which(llik == max(llik))
     if (equalr) {
-      return(mean(reval[imax]))  # [1] first only; reval[imax] - all; mean()
+      return(mean(rval[imax]))  # [1] first only; reval[imax] - all; mean()
     } else {
       return(rowMeans(reval[, imax, drop = FALSE]))
       # reval[, imax[1]]
@@ -169,7 +169,7 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   }
   imax <- which(llik == max(llik))
   if (equalr) {
-    est <- mean(reval[imax])  # [1] first only; reval[imax] - all; mean()
+    est <- mean(rval[imax])  # [1] first only; reval[imax] - all; mean()
   } else {
     est <- rowMeans(reval[, imax, drop = FALSE])
     # reval[, imax[1]]
@@ -260,7 +260,7 @@ gdistPair2 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   } else {
     imax <- which(llik == max(llik))
     if (equalr) {
-      return(mean(reval[imax]))  # [1] first only; reval[imax] - all; mean()
+      return(mean(rval[imax]))  # [1] first only; reval[imax] - all; mean()
     } else {
       return(rowMeans(reval[, imax, drop = FALSE]))
       # reval[, imax[1]]
@@ -370,7 +370,7 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
       }
       imax <- which(llik == max(llik))
       if (equalr) {
-        res[[ix, iy]] <- mean(reval[[nm]][imax])  # [1] first; reval[imax] all; mean()
+        res[[ix, iy]] <- mean(rval[imax])  # [1] first; rval[imax] all; mean()
       } else {
         res[[ix, iy]] <- rowMeans(reval[[nm]][, imax, drop = FALSE])
         # reval[[nm]][, imax[1]] first
