@@ -35,7 +35,7 @@ probUxUy <- function(Ux, Uy, nx, ny, probs, reval) {
   return(.Call("llik", as.integer(Ux), as.integer(Uy), as.integer(ixy),
                as.integer(iyx), as.integer(nx), as.integer(ny),
                as.double(probs), as.double(logj), as.double(factj),
-               as.double(reval), as.integer(nm)))
+               as.double(reval), as.integer(nm), PACKAGE = "unfazeD"))
 }
 
 #' @rdname probUxUy
@@ -53,8 +53,8 @@ probUxUyEqr <- function(Ux, Uy, nx, ny, probs, rval, nm) {
   logj   <- log(1:max(nx, ny))         # starts with 1
   factj  <- lgamma(0:max(nx, ny) + 1)  # starts with 0
 
-  return(.Call("llikEqr", as.integer(Ux), as.integer(Uy), as.integer(ixy),
-               as.integer(iyx), as.integer(nx), as.integer(ny),
+  return(.Call("llikEqr", as.integer(Ux), as.integer(Uy),
+               as.integer(ixy), as.integer(iyx), as.integer(nx), as.integer(ny),
                as.double(probs), as.double(logj), as.double(factj),
-               as.double(rval), as.integer(nm)))
+               as.double(rval), as.integer(nm), PACKAGE = "unfazeD"))
 }
