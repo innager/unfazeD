@@ -2,13 +2,16 @@ Package: unfazeD
 Type: Package
 Title: Genetic Distance for Malaria Transmission and Relatedness
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: Estimate genetic relatedness between polyclonal 
+Author@R: 
+    person(given = "Inna", family = "Gerlovina", email = "innager@berkeley.edu", 
+           role = c("aut", "cre"))
+Description: Estimate genetic distance between polyclonal 
     multiallelic samples.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports:
+    stats
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Suggests: 

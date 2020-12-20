@@ -5,7 +5,7 @@
 \title{Genetic distance for data with genotyping errors}
 \usage{
 gdistPair1(pair, afreq, coi, nr = 100, nm = min(coi), rval = NULL,
-  reval = NULL, equalr = FALSE, out = "mle", proplik = 0.1)
+  reval = NULL, equalr = FALSE, out = "mle", alpha = 0.05)
 }
 \arguments{
 \item{pair}{a list of length two containing two samples.}
@@ -36,19 +36,19 @@ different pairs of strains are evaluated.}
 \code{"mle"}, an estimate is returned, if \code{"llik"} - a vector of
 log-likelihood for each combination.}
 
-\item{proplik}{proportion of the range of loglikelihood to use for an
-acceptance region.}
+\item{alpha}{significance level.}
 }
 \value{
 \itemize{
 \item If \code{out = "mle"}: a vector of length 1 if \code{equalr = TRUE}
 or of length \code{nm} otherwise, containing estimated \eqn{{r}} (or vector
 /matrix if not just first).
-\item If \code{out = "llike"}, a vector of loglikelihood values for each
+\item If \code{out = "llike"}, a vector of log-likelihood values for each
 evaluated combination.
-\item If \code{out = "all"}, a list, which contains both loglikelihood and MLE,
-as well as \eqn{{r}} values corresponding to the acceptance region and
-their proportion (out of all evaluated).
+\item If \code{out = "all"}, a list, which contains log-likelihood, MLE,
+\eqn{{r}} values corresponding to the acceptance region determined by the
+significance level, and the size of that region (as a proportion of all
+evaluated).
 }
 }
 \description{

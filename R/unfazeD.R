@@ -99,24 +99,24 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
 #' Ux and Uy; however, if present in either one, the likelihood is 0, so no need
 #' to calculate.
 #'
-#' @param proplik proportion of the range of loglikelihood to use for an
-#'   acceptance region.
+#' @param alpha significance level.
 #' @return
 #'   * If \code{out = "mle"}: a vector of length 1 if \code{equalr = TRUE}
 #'   or of length \code{nm} otherwise, containing estimated \eqn{{r}} (or vector
 #'   /matrix if not just first).
-#'   * If \code{out = "llike"}, a vector of loglikelihood values for each
+#'   * If \code{out = "llike"}, a vector of log-likelihood values for each
 #'   evaluated combination.
-#'   * If \code{out = "all"}, a list, which contains both loglikelihood and MLE,
-#'   as well as \eqn{{r}} values corresponding to the acceptance region and
-#'   their proportion (out of all evaluated).
+#'   * If \code{out = "all"}, a list, which contains log-likelihood, MLE,
+#'   \eqn{{r}} values corresponding to the acceptance region determined by the
+#'   significance level, and the size of that region (as a proportion of all
+#'   evaluated).
 #' @inherit gdistPair params
 #' @export
 
 # out options: "mle", "llik", "all" (*** gdistPair1 only - add to others?)
 gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
                        reval = NULL, equalr = FALSE, out = "mle",
-                       proplik = 0.1) {
+                       alpha = 0.05) {
   nloc <- length(afreq)
 
   if (is.null(rval)) {
@@ -133,15 +133,12 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
 
   llik <- rep(0, neval)
   for (t in 1:nloc) {
-    #*** think of assigning r = 0 if no shared alleles;
-    #    then r should be 0 for all loci (but what about errors?)
-    #    maybe evaluate over other loci and have the number of loci with 0
-    #    can 0 be only if there are no shared alleles in at least one locus?
     Ux <- which(as.logical(pair[[1]][[t]]))  # in case of integer vector
     Uy <- which(as.logical(pair[[2]][[t]]))
+    #*** shouldn't happen with our error simulation
     if (length(Ux) == 0 ||                   # NA or all 0's
         length(Uy) == 0 ||                   # NA or all 0's
-        any(afreq[[t]][unique(c(Ux, Uy))] <= 0)) {  #*** < check 0 separately?
+        any(afreq[[t]][unique(c(Ux, Uy))] == 0)) {  # likelihood = 0
       next                                   # likelihood = 0 or no data
     }
     coix <- max(coi[1], length(Ux))
@@ -151,6 +148,7 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     } else {
       llikt <- probUxUy(   Ux, Uy, coix, coiy, afreq[[t]], reval)
     }
+    #*** check and maybe remove
     if (llikt[1] == -Inf) {
       if (all(llikt == -Inf)) {
         next
@@ -177,12 +175,13 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   if (out == "mle") {
     return(est)
   }
-  llrange <- range(llik[is.finite(llik)])  # some likelihoods can be 0
-  cutoff  <- llrange[2] - diff(llrange)*proplik
+
+  qchi <- stats::qchisq(1 - alpha, df = ifelse(equalr, 1, nrow(reval)))
+  cutoff  <- max(llik) - qchi/2
   itop    <- llik >= cutoff
   proptop <- sum(itop)/neval
   if (equalr) {
-    rtop <- reval[itop]
+    rtop <- rval[itop]
   } else {
     rtop <- reval[, itop, drop = FALSE]
   }
