@@ -13,7 +13,7 @@
 #' @param nm     the number of related pairs of strains for evaluation.
 #' @param rval  \eqn{{r}} values for the grid. If \code{NULL}, will be evenly
 #'   spaced between 0 and 1 and interval \eqn{1/nr}.
-#' @param reval  the grid of \eqn{\{r\}} combinations, over which the likelihood
+#' @param reval  the grid of \eqn{{r}} combinations, over which the likelihood
 #'   will be calculated. A vector if there is a single related pair or if
 #'   \code{equalr} is \code{TRUE}; otherwise a matrix where each column
 #'   represents a single combination.
