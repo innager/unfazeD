@@ -4,8 +4,19 @@
 \alias{gdist}
 \title{Genetic Distance}
 \usage{
-gdist(dat, afreq, coi, nmmax, nr = 100, rval = NULL, reval = NULL,
-  FUNnm = NULL, equalr = FALSE, split = "[[:space:][:punct:]]+", ...)
+gdist(
+  dat,
+  afreq,
+  coi,
+  nmmax,
+  nr = 100,
+  rval = NULL,
+  reval = NULL,
+  FUNnm = NULL,
+  equalr = FALSE,
+  split = "[[:space:][:punct:]]+",
+  ...
+)
 }
 \arguments{
 \item{dat}{data containing sample genotypes. Various formats allowed.}

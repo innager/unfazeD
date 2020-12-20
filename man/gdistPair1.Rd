@@ -4,8 +4,18 @@
 \alias{gdistPair1}
 \title{Genetic distance for data with genotyping errors}
 \usage{
-gdistPair1(pair, afreq, coi, nr = 100, nm = min(coi), rval = NULL,
-  reval = NULL, equalr = FALSE, out = "mle", alpha = 0.05)
+gdistPair1(
+  pair,
+  afreq,
+  coi,
+  nr = 100,
+  nm = min(coi),
+  rval = NULL,
+  reval = NULL,
+  equalr = FALSE,
+  out = "mle",
+  alpha = 0.05
+)
 }
 \arguments{
 \item{pair}{a list of length two containing two samples.}

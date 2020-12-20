@@ -3,7 +3,7 @@ Type: Package
 Title: Genetic Distance for Malaria Transmission and Relatedness
 Version: 0.1.0
 Author@R: 
-    person(given = "Inna", family = "Gerlovina", email = "innager@berkeley.edu", 
+    person("Inna", "Gerlovina", email = "innager@berkeley.edu", 
            role = c("aut", "cre"))
 Description: Estimate genetic distance between polyclonal 
     multiallelic samples.
@@ -12,7 +12,9 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     stats
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Suggests: 
     testthat
+Author: Inna Gerlovina <innager@berkeley.edu>
+Maintainer: Inna Gerlovina <innager@berkeley.edu>
