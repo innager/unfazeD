@@ -387,8 +387,8 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
 #'
 #' @param Meval an integer vector.
 #' @param rval  \eqn{{r}} values for the grid.
-#' @param nr   an integer vector of length \code{Mmax} indicating the fineness
-#'   of the grid.
+#' @param nr an integer vector of length \code{max(Meval)} indicating the
+#'   fineness of the grid.
 #' @return A list of length \code{max(Meval)}. Indices of the elements
 #'   correspond to values \code{i} in \code{Meval}; each such element is a
 #'   matrix with \code{i} rows. Other elements (if any) are \code{NULL} except

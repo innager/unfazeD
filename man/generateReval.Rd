@@ -11,8 +11,8 @@ generateReval(Meval, rval = NULL, nr = NULL)
 
 \item{rval}{\eqn{{r}} values for the grid.}
 
-\item{nr}{an integer vector of length \code{Mmax} indicating the fineness
-of the grid.}
+\item{nr}{an integer vector of length \code{max(Meval)} indicating the
+fineness of the grid.}
 }
 \value{
 A list of length \code{max(Meval)}. Indices of the elements
