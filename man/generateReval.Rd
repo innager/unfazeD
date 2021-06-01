@@ -4,10 +4,10 @@
 \alias{generateReval}
 \title{Generate a grid of parameter values to evaluate over}
 \usage{
-generateReval(Mmax, rval = NULL, nr = NULL)
+generateReval(Meval, rval = NULL, nr = NULL)
 }
 \arguments{
-\item{Mmax}{an integer, maximum \code{M}.}
+\item{Meval}{an integer vector.}
 
 \item{rval}{\eqn{{r}} values for the grid.}
 

@@ -385,7 +385,7 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
 
 #' Generate a grid of parameter values to evaluate over
 #'
-#' @param Mmax an integer, maximum \code{M}.
+#' @param Meval an integer vector.
 #' @param rval  \eqn{{r}} values for the grid.
 #' @param nr   an integer vector of length \code{Mmax} indicating the fineness
 #'   of the grid.
@@ -395,14 +395,14 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
 #'   for the first, which is always included.
 #'
 #' @export
-# list returned, elements correspond to Meval; M = 1 included always
+# list returned, elements correspond to Meval; M = 1 included always #*** change
 # if rval and nr are both provided, rval used for M = 1, nr used for M > 1
-generateReval <- function(Mmax, rval = NULL, nr = NULL) {
+generateReval <- function(Meval, rval = NULL, nr = NULL) {
   if (is.null(rval)) {
     rval <- round(seq(0, 1, 1/nr[1]), ceiling(log(nr[1], 10)))
   }
   reval <- list(matrix(rval, 1))
-  for (M in 2:Mmax) {
+  for (M in Meval[Meval > 1]) {
     if (!is.null(nr)) {
       rval <- round(seq(0, 1, 1/nr[M]), ceiling(log(nr[M], 10)))
     }
@@ -414,6 +414,8 @@ generateReval <- function(Mmax, rval = NULL, nr = NULL) {
   }
   return(reval)
 }
+
+#*** eventually make just for one M (?)
 
 # get combinations of alleles when length(Ux) > coix
 getComb <- function(Ux, coix) {
