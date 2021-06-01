@@ -32,13 +32,13 @@ corresponds to a locus.}
 values between 0 and 1), over which the likelihood will be calculated.
 Ignored if non-null \code{reval} is provided.}
 
-\item{rval}{\eqn{{r}} values for the grid. If \code{NULL}, will be evenly
-spaced between 0 and 1 and interval \eqn{1/nr}.}
+\item{rval}{\eqn{{r}} values for the grid or for evaluation when
+\code{equalr} is \code{TRUE}. If \code{NULL}, will be evenly spaced between
+0 and 1 and interval \eqn{1/nr}.}
 
 \item{reval}{the grid of \eqn{{r}} combinations, over which the likelihood
-will be calculated. A vector if there is a single related pair or if
-\code{equalr} is \code{TRUE}; otherwise a matrix where each column
-represents a single combination.}
+will be calculated. A matrix where each column represents a single
+combination.}
 
 \item{FUNnm}{potentially a function to select \code{nm} for each pair of
 samples.}

@@ -11,12 +11,12 @@
 #'   values between 0 and 1), over which the likelihood will be calculated.
 #'   Ignored if non-null \code{reval} is provided.
 #' @param nm     the number of related pairs of strains for evaluation.
-#' @param rval  \eqn{{r}} values for the grid. If \code{NULL}, will be evenly
-#'   spaced between 0 and 1 and interval \eqn{1/nr}.
+#' @param rval  \eqn{{r}} values for the grid or for evaluation when
+#'   \code{equalr} is \code{TRUE}. If \code{NULL}, will be evenly spaced between
+#'   0 and 1 and interval \eqn{1/nr}.
 #' @param reval  the grid of \eqn{{r}} combinations, over which the likelihood
-#'   will be calculated. A vector if there is a single related pair or if
-#'   \code{equalr} is \code{TRUE}; otherwise a matrix where each column
-#'   represents a single combination.
+#'   will be calculated. A matrix where each column represents a single
+#'   combination.
 #' @param equalr a logical value. If \code{TRUE}, only equal values of _r_ for
 #'   different pairs of strains are evaluated.
 #' @param out    a character string for the type of results to be returned. If
@@ -106,10 +106,10 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
 #'   /matrix if not just first).
 #'   * If \code{out = "llike"}, a vector of log-likelihood values for each
 #'   evaluated combination.
-#'   * If \code{out = "all"}, a list, which contains log-likelihood, MLE,
-#'   \eqn{{r}} values corresponding to the acceptance region determined by the
-#'   significance level, and the size of that region (as a proportion of all
-#'   evaluated).
+#'   * If \code{out = "all"}, a list containing an estimate, log-likelihood,
+#'   maximum log-likelihood, \eqn{{r}} values corresponding to the acceptance
+#'   region determined by the significance level, and the size of that region
+#'   (as a proportion of all evaluated).
 #' @inherit gdistPair params
 #' @export
 
@@ -162,7 +162,7 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     }
   }
 
-  if (out == "llik") {
+  if (tolower(out) == "llik") {
     return(llik)
   }
   imax <- which(llik == max(llik))
@@ -172,7 +172,7 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     est <- rowMeans(reval[, imax, drop = FALSE])
     # reval[, imax[1]]
   }
-  if (out == "mle") {
+  if (tolower(out == "mle")) {
     return(est)
   }
 
@@ -185,7 +185,8 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
   } else {
     rtop <- reval[, itop, drop = FALSE]
   }
-  return(list(mle = est, llik = llik, rtop = rtop, proptop = proptop))
+  return(list(mle = est, llik = llik, maxllik = llik[imax[1]], rtop = rtop,
+              proptop = proptop))
 }
 
 #' Genetic distance for data with genotyping errors
@@ -382,17 +383,29 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
   return(res)
 }
 
-#' @param Meval integer vector
+#' Generate a grid of parameter values to evaluate over
+#'
+#' @param Mmax an integer, maximum \code{M}.
+#' @param rval  \eqn{{r}} values for the grid.
+#' @param nr   an integer vector of length \code{Mmax} indicating the fineness
+#'   of the grid.
 #' @return A list of length \code{max(Meval)}. Indices of the elements
 #'   correspond to values \code{i} in \code{Meval}; each such element is a
 #'   matrix with \code{i} rows. Other elements (if any) are \code{NULL} except
 #'   for the first, which is always included.
 #'
+#' @export
 # list returned, elements correspond to Meval; M = 1 included always
-generateReval <- function(Meval, rval) {
-  # if FUNnm, calculate all pairwise nm, then take unique()
+# if rval and nr are both provided, rval used for M = 1, nr used for M > 1
+generateReval <- function(Mmax, rval = NULL, nr = NULL) {
+  if (is.null(rval)) {
+    rval <- round(seq(0, 1, 1/nr[1]), ceiling(log(nr[1], 10)))
+  }
   reval <- list(matrix(rval, 1))
-  for (M in Meval[Meval > 1]) {
+  for (M in 2:Mmax) {
+    if (!is.null(nr)) {
+      rval <- round(seq(0, 1, 1/nr[M]), ceiling(log(nr[M], 10)))
+    }
     revalm <- as.matrix(expand.grid(rep(list(rval), M)))
     for (k in 1:nrow(revalm)) {         # faster than apply()
       revalm[k, ] <- sort(revalm[k, ])

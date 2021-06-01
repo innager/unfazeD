@@ -30,13 +30,13 @@ Ignored if non-null \code{reval} is provided.}
 
 \item{nm}{the number of related pairs of strains for evaluation.}
 
-\item{rval}{\eqn{{r}} values for the grid. If \code{NULL}, will be evenly
-spaced between 0 and 1 and interval \eqn{1/nr}.}
+\item{rval}{\eqn{{r}} values for the grid or for evaluation when
+\code{equalr} is \code{TRUE}. If \code{NULL}, will be evenly spaced between
+0 and 1 and interval \eqn{1/nr}.}
 
 \item{reval}{the grid of \eqn{{r}} combinations, over which the likelihood
-will be calculated. A vector if there is a single related pair or if
-\code{equalr} is \code{TRUE}; otherwise a matrix where each column
-represents a single combination.}
+will be calculated. A matrix where each column represents a single
+combination.}
 
 \item{equalr}{a logical value. If \code{TRUE}, only equal values of \emph{r} for
 different pairs of strains are evaluated.}

@@ -31,13 +31,13 @@ Ignored if non-null \code{reval} is provided.}
 
 \item{nm}{the number of related pairs of strains for evaluation.}
 
-\item{rval}{\eqn{{r}} values for the grid. If \code{NULL}, will be evenly
-spaced between 0 and 1 and interval \eqn{1/nr}.}
+\item{rval}{\eqn{{r}} values for the grid or for evaluation when
+\code{equalr} is \code{TRUE}. If \code{NULL}, will be evenly spaced between
+0 and 1 and interval \eqn{1/nr}.}
 
 \item{reval}{the grid of \eqn{{r}} combinations, over which the likelihood
-will be calculated. A vector if there is a single related pair or if
-\code{equalr} is \code{TRUE}; otherwise a matrix where each column
-represents a single combination.}
+will be calculated. A matrix where each column represents a single
+combination.}
 
 \item{equalr}{a logical value. If \code{TRUE}, only equal values of \emph{r} for
 different pairs of strains are evaluated.}
@@ -55,10 +55,10 @@ or of length \code{nm} otherwise, containing estimated \eqn{{r}} (or vector
 /matrix if not just first).
 \item If \code{out = "llike"}, a vector of log-likelihood values for each
 evaluated combination.
-\item If \code{out = "all"}, a list, which contains log-likelihood, MLE,
-\eqn{{r}} values corresponding to the acceptance region determined by the
-significance level, and the size of that region (as a proportion of all
-evaluated).
+\item If \code{out = "all"}, a list containing an estimate, log-likelihood,
+maximum log-likelihood, \eqn{{r}} values corresponding to the acceptance
+region determined by the significance level, and the size of that region
+(as a proportion of all evaluated).
 }
 }
 \description{
