@@ -46,7 +46,7 @@ gdistPair <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     neval <- length(rval)
   } else {
     if (is.null(reval)) {
-      reval <- generateReval(nm, rval)[[nm]]
+      reval <- generateReval(nm, rval)
     }
     neval <- ncol(reval)
   }
@@ -126,7 +126,7 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     neval <- length(rval)
   } else {
     if (is.null(reval)) {
-      reval <- generateReval(nm, rval)[[nm]]
+      reval <- generateReval(nm, rval)
     }
     neval <- ncol(reval)
   }
@@ -209,7 +209,7 @@ gdistPair2 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
     neval <- length(rval)
   } else {
     if (is.null(reval)) {
-      reval <- generateReval(nm, rval)[[nm]]
+      reval <- generateReval(nm, rval)
     }
     neval <- ncol(reval)
   }
@@ -320,7 +320,7 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
     neval <- length(rval)
   } else {
     if (is.null(reval)) {
-      reval <- generateReval(1:nmmax, rval)
+      reval <- generateRevalList(1:nmmax, rval)
     }
   }
   res  <- matrix(list(NA), nsmp, nsmp)
