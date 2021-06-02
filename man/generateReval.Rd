@@ -2,24 +2,39 @@
 % Please edit documentation in R/unfazeD.R
 \name{generateReval}
 \alias{generateReval}
+\alias{generateRevalList}
 \title{Generate a grid of parameter values to evaluate over}
 \usage{
-generateReval(Meval, rval = NULL, nr = NULL)
+generateReval(M, rval = NA, nr = NA)
+
+generateRevalList(Ms, rvals = NA, nrs = NA)
 }
 \arguments{
-\item{Meval}{an integer vector.}
+\item{M}{an integer.}
 
-\item{rval}{\eqn{{r}} values for the grid.}
+\item{rval}{\eqn{{r}} values for the grid. Takes precedence over \code{nr}.}
 
-\item{nr}{an integer vector of length \code{max(Meval)} indicating the
-fineness of the grid.}
+\item{nr}{an integer. If \code{rval} is not provided, it will be generated
+using \code{0}, \code{1}, and \code{nr - 1} values between them.}
+
+\item{Ms}{an integer vector.}
+
+\item{rvals}{a list of the length \code{max(Mv)}. Can also be a vector like
+\code{rval}; in that case the same vector will be used for all the values
+of \code{Mv}.}
+
+\item{nrs}{an integer vector of the length \code{max(Mv)}.}
 }
 \value{
-A list of length \code{max(Meval)}. Indices of the elements
-correspond to values \code{i} in \code{Meval}; each such element is a
-matrix with \code{i} rows. Other elements (if any) are \code{NULL} except
-for the first, which is always included.
+A a matrix with \code{M} rows and \code{nr + 1} or
+\code{length(rval)} columns.
+
+A list of the length \code{max(Mv)} with elements corresponding to
+the values of \code{Mv}. Each element is a matrix with \code{M} rows and
+\code{nr + 1} or \code{length(rval)} columns.
 }
 \description{
 Generate a grid of parameter values to evaluate over
+
+Generate a grid of parameter values for multiple values of \code{M}
 }

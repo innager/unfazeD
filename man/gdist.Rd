@@ -58,8 +58,8 @@ list. Each pairwise distance contains a scalar, a vector, or a matrix of
 if all the elements are of length 1.
 }
 \description{
-Pairwise estimation of relatedness parameters for polyclonal multiallelic
-samples.
+Pairwise estimation of relatedness parameters for polyclonal
+multiallelic samples.
 }
 \details{
 To be added: data formats that can be processed, formats to be

@@ -270,8 +270,8 @@ gdistPair2 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
 
 #' Genetic Distance
 #'
-#' Pairwise estimation of relatedness parameters for polyclonal multiallelic
-#' samples.
+#' @description Pairwise estimation of relatedness parameters for polyclonal
+#'   multiallelic samples.
 #'
 #' @details To be added: data formats that can be processed, formats to be
 #'   returned.
@@ -385,37 +385,55 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
 
 #' Generate a grid of parameter values to evaluate over
 #'
-#' @param Meval an integer vector.
-#' @param rval  \eqn{{r}} values for the grid.
-#' @param nr an integer vector of length \code{max(Meval)} indicating the
-#'   fineness of the grid.
-#' @return A list of length \code{max(Meval)}. Indices of the elements
-#'   correspond to values \code{i} in \code{Meval}; each such element is a
-#'   matrix with \code{i} rows. Other elements (if any) are \code{NULL} except
-#'   for the first, which is always included.
+#' @param M an integer.
+#' @param rval \eqn{{r}} values for the grid. Takes precedence over \code{nr}.
+#' @param nr an integer. If \code{rval} is not provided, it will be generated
+#'   using \code{0}, \code{1}, and \code{nr - 1} values between them.
+#' @return A a matrix with \code{M} rows and \code{nr + 1} or
+#'   \code{length(rval)} columns.
 #'
 #' @export
-# list returned, elements correspond to Meval; M = 1 included always #*** change
-# if rval and nr are both provided, rval used for M = 1, nr used for M > 1
-generateReval <- function(Meval, rval = NULL, nr = NULL) {
-  if (is.null(rval)) {
-    rval <- round(seq(0, 1, 1/nr[1]), ceiling(log(nr[1], 10)))
-  }
-  reval <- list(matrix(rval, 1))
-  for (M in Meval[Meval > 1]) {
-    if (!is.null(nr)) {
-      rval <- round(seq(0, 1, 1/nr[M]), ceiling(log(nr[M], 10)))
+generateReval <- function(M, rval = NA, nr = NA) {
+  if (is.na(rval)) {
+    if (is.na(nr)) {
+      return(NA)
     }
-    revalm <- as.matrix(expand.grid(rep(list(rval), M)))
-    for (k in 1:nrow(revalm)) {         # faster than apply()
-      revalm[k, ] <- sort(revalm[k, ])
-    }
-    reval[[M]] <- t(unique(revalm))
+    rval <- round(seq(0, 1, 1/nr), ceiling(log(nr, 10)))
   }
-  return(reval)
+  if (M == 1) {
+    return(matrix(rval, 1))
+  }
+  reval <- as.matrix(expand.grid(rep(list(rval), M)))
+  for (k in 1:nrow(reval)) {         # faster than apply()
+    reval[k, ] <- sort(reval[k, ])
+  }
+  return(t(unique(reval)))
 }
 
-#*** eventually make just for one M (?)
+#' Generate a grid of parameter values for multiple values of \code{M}
+#'
+#' @param Ms an integer vector.
+#' @param rvals a list of the length \code{max(Mv)}. Can also be a vector like
+#'   \code{rval}; in that case the same vector will be used for all the values
+#'   of \code{Mv}.
+#' @param nrs an integer vector of the length \code{max(Mv)}.
+#' @return A list of the length \code{max(Mv)} with elements corresponding to
+#'   the values of \code{Mv}. Each element is a matrix with \code{M} rows and
+#'   \code{nr + 1} or \code{length(rval)} columns.
+#'
+#' @export
+#' @rdname generateReval
+generateRevalList <- function(Ms, rvals = NA, nrs = NA) {
+  Mmax <- max(Ms)
+  revals <- as.list(rep(NA, Mmax))
+  if (is.na(rvals[1]))          rvals <- rep(list(NA   ), Mmax)
+  if (!inherits(rvals, "list")) rvals <- rep(list(rvals), Mmax)
+  if (is.na(nrs[1]))            nrs   <- rep(NA, Mmax)
+  for (M in Ms) {
+    revals[[M]] <- generateReval(M, rvals[[M]], nrs[M])
+  }
+  return(revals)
+}
 
 # get combinations of alleles when length(Ux) > coix
 getComb <- function(Ux, coix) {
