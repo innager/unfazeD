@@ -119,17 +119,14 @@ gdistPair1 <- function(pair, afreq, coi, nr = 1e2, nm = min(coi), rval = NULL,
                        alpha = 0.05) {
   nloc <- length(afreq)
 
-  if (is.null(rval)) {
+  if (( equalr && is.null(rval)) ||
+      (!equalr && is.null(reval) && is.null(rval))) {
     rval <- round(seq(0, 1, 1/nr), ceiling(log(nr, 10)))
   }
-  if (equalr) {
-    neval <- length(rval)
-  } else {
-    if (is.null(reval)) {
-      reval <- generateReval(nm, rval)
-    }
-    neval <- ncol(reval)
+  if (!equalr && is.null(reval)) {
+    reval <- generateReval(nm, rval)
   }
+  neval <- ifelse(equalr, length(rval), ncol(reval))
 
   llik <- rep(0, neval)
   for (t in 1:nloc) {
