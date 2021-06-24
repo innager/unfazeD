@@ -391,7 +391,7 @@ gdist <- function(dat, afreq, coi, nmmax, nr = 1e2, rval = NULL, reval = NULL,
 #'
 #' @export
 generateReval <- function(M, rval = NA, nr = NA) {
-  if (is.na(rval)) {
+  if (is.na(rval[1])) {
     if (is.na(nr)) {
       return(NA)
     }

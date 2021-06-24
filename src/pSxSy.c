@@ -50,7 +50,7 @@ double probSxSy(double *rm, double *sprob, int nm, int mmax)
     return 0;
   }
 
-  /* in line with unified algorithm */
+  /* in line with MIRSA algorithm */
   for (i = 0; i < nm; i++) {
     ibdmax[i] = 1;
   }
@@ -60,13 +60,13 @@ double probSxSy(double *rm, double *sprob, int nm, int mmax)
 
   sum = exp(prob + sprob[m]);  // # of r = 1 is greater than # of shared alleles
   i = nm - 1; 
-  while (!equalArr(ibd, ibdmax, nm)) {  //equalArr() returns 1 if nm = 0
+  while (!equalArr(ibd, ibdmax, nm)) {  // equalArr() returns 1 if nm = 0
     if (ibd[i] == 1 || m == mmax) {
-      if (ibd[i] == 0) {
+      if (ibd[i] == 0) {                /* m == mmax */
 	i--;
 	continue; 
       }
-      m -= ibd[i]; // can be 0!!!      
+      m -= ibd[i];  /* ibd[i] can be 0 */     
       ibd[i] = 0;
       prob += log1r[i] - logr[i]; 
       i--;
